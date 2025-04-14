@@ -1,8 +1,9 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useMotionValue } from "framer-motion";
 
 interface Product {
   title: string;
@@ -10,76 +11,108 @@ interface Product {
   thumbnail: string;
 }
 
-interface ParallaxProps {
-  products: Product[];
-}
+const products: Product[] = [
+  {
+    title: "Moonbeam",
+    link: "https://gomoonbeam.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+  },
+  {
+    title: "Cursor",
+    link: "https://cursor.so",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+  },
+  {
+    title: "Rogue",
+    link: "https://userogue.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+  },
+  {
+    title: "Editorially",
+    link: "https://editorially.org",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+  },
+  {
+    title: "Editrix AI",
+    link: "https://editrix.ai",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+  },
+  {
+    title: "Pixel Perfect",
+    link: "https://app.pixelperfect.quest",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
+  },
+  {
+    title: "Algochurn",
+    link: "https://algochurn.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+  },
+  {
+    title: "Aceternity UI",
+    link: "https://ui.aceternity.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+  },
+  {
+    title: "Tailwind Master Kit",
+    link: "https://tailwindmasterkit.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+  },
+  {
+    title: "SmartBridge",
+    link: "https://smartbridgetech.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+  },
+  {
+    title: "Renderwork Studio",
+    link: "https://renderwork.studio",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
+  },
+  {
+    title: "Creme Digital",
+    link: "https://cremedigital.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+  },
+  {
+    title: "Golden Bells Academy",
+    link: "https://goldenbellsacademy.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+  },
+  {
+    title: "Invoker Labs",
+    link: "https://invoker.lol",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+  },
+  {
+    title: "E Free Invoice",
+    link: "https://efreeinvoice.com",
+    thumbnail: "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+  },
+];
 
 export function HeroParallax() {
-  const products: Product[] = [
-    {
-      title: "Secure Smart Contract Development",
-      link: "#",
-      thumbnail: "/images/smart-contract.png"
-    },
-    {
-      title: "Multi-Chain Deployment",
-      link: "#",
-      thumbnail: "/images/multi-chain.png"
-    },
-    {
-      title: "AI-Powered Code Analysis",
-      link: "#",
-      thumbnail: "/images/ai-analysis.png"
-    }
-  ];
-
-  const firstRow = products.slice(0, 1);
-  const secondRow = products.slice(1, 2);
-  const thirdRow = products.slice(2);
+  const firstRow = products.slice(0, 5);
+  const secondRow = products.slice(5, 10);
+  const thirdRow = products.slice(10);
 
   const ref = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
-
-  const translateX = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, -1000],
-    springConfig
-  );
-  const translateXReverse = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, 1000],
-    springConfig
-  );
-  const rotateX = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [15, 0, 0, 15],
-    springConfig
-  );
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [0.2, 1, 1, 0.2]
-  );
-  const rotateZ = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [20, 0, 0, 20],
-    springConfig
-  );
-  const translateY = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [-700, 0, 0, -700],
-    springConfig
-  );
+  const initialMotionValue = useMotionValue(0);
+  const translateX = useTransform(scrollYProgress, [0, 1], [0, -1000]);
+  const translateXReverse = useTransform(scrollYProgress, [0, 1], [0, 1000]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [15, 0, 0, 15]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.2, 1, 1, 0.2]);
+  const rotateZ = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [20, 0, 0, 20]);
+  const translateY = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [-700, 0, 0, -700]);
 
   return (
     <div
@@ -89,10 +122,10 @@ export function HeroParallax() {
       <Header />
       <motion.div
         style={{
-          rotateX,
-          rotateZ,
-          translateY,
-          opacity,
+          rotateX: isMounted ? rotateX : initialMotionValue,
+          rotateZ: isMounted ? rotateZ : initialMotionValue,
+          translateY: isMounted ? translateY : initialMotionValue,
+          opacity: isMounted ? opacity : initialMotionValue,
         }}
         className=""
       >
@@ -101,7 +134,7 @@ export function HeroParallax() {
             <ProductCard
               key={product.title}
               {...product}
-              translate={translateX}
+              translate={isMounted ? translateX : initialMotionValue}
             />
           ))}
         </motion.div>
@@ -110,7 +143,7 @@ export function HeroParallax() {
             <ProductCard
               key={product.title}
               {...product}
-              translate={translateXReverse}
+              translate={isMounted ? translateXReverse : initialMotionValue}
             />
           ))}
         </motion.div>
@@ -119,7 +152,7 @@ export function HeroParallax() {
             <ProductCard
               key={product.title}
               {...product}
-              translate={translateX}
+              translate={isMounted ? translateX : initialMotionValue}
             />
           ))}
         </motion.div>
@@ -148,7 +181,7 @@ const ProductCard = ({
   thumbnail,
   translate,
 }: Product & {
-  translate: any; // This is a motion value from framer-motion, can be typed more specifically if needed
+  translate: MotionValue<number>;
 }) => {
   return (
     <motion.div
@@ -158,10 +191,12 @@ const ProductCard = ({
       className="group/product h-96 w-[30rem] relative flex-shrink-0"
     >
       <a href={link} className="block group-hover/product:shadow-2xl">
-        <img
+        <Image
           src={thumbnail}
-          className="object-cover object-left-top absolute h-full w-full inset-0"
           alt={title}
+          width={480}
+          height={384}
+          className="object-cover object-left-top absolute h-full w-full inset-0"
         />
       </a>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none"></div>
