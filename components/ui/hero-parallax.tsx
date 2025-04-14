@@ -1,7 +1,7 @@
 "use client";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useRef, useState, useEffect } from "react";
 import { useMotionValue } from "framer-motion";
 
